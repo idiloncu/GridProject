@@ -6,16 +6,15 @@ import android.widget.GridLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.example.gridproject.data.ImageModel
 import com.example.gridproject.data.ImageData
-import com.example.gridproject.data.ImageHolder
 import com.example.gridproject.databinding.RecyclerRowBinding
 
-class ImageAdapter(private val onItemClicked:(ImageModel)->Unit):ListAdapter<ImageModel,ImageHolder>(ImageCallback()){
-
+class ImageAdapter(private val onItemClicked:(ImageModel)->Unit):ListAdapter<ImageModel, ImageAdapter.ImageHolder>(ImageCallback()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
-        val binding = GridLayout.inflate(LayoutInflater.from(parent.context), parent, false)
+      val binding=  RecyclerRowBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return ImageHolder(binding){
             onItemClicked(getItem(it))
         }
@@ -25,6 +24,21 @@ class ImageAdapter(private val onItemClicked:(ImageModel)->Unit):ListAdapter<Ima
         holder.bind(model= getItem(position))
     }
 
+
+   inner class ImageHolder (
+        private val binding: RecyclerRowBinding,
+        private val onItemClick:(Int)->Unit
+
+    ):RecyclerView.ViewHolder(binding.root){
+        fun bind(model: ImageModel){
+            with(binding){
+
+                itemView.setOnClickListener{
+                    onItemClick(adapterPosition)
+                }
+            }
+        }
+    }
 
 }
 
